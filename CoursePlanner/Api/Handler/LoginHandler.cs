@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Net;
 using System.IO;
-                
+using CoursePlanner.Api;
+
 namespace CoursePlanner
 {
     public class LoginHandler
     {
         
-        public delegate void LoginCallBack(HttpWebResponse Response, string LoginToken);
+        public delegate void LoginCallBack(HttpWebResponse Response, LoginStatus Status, string LoginToken);
         public event LoginCallBack Callback;
 
-        private int loginAttempts;
+        public LoginStatus Status
+        {
+            get;
+            private set;
+        }
+
         public int LoginAttempts
         {
-            get { return loginAttempts; }
-            private set { loginAttempts = value; }
+            get;
+            private set;
         }
 
         private LoginJson loginData;
@@ -23,19 +29,18 @@ namespace CoursePlanner
             get { return loginData; }
         }
 
-        private Uri loginLink;
         public Uri LoginLink
         {
-            get { return loginLink; }
-            private set { loginLink = value; }
+            get;
+            private set;
         }
 
-        public LoginHandler(Uri LoginLink)
+        public LoginHandler(Uri LoginUrl)
         {
-            loginLink = LoginLink;
+            LoginLink = LoginUrl;
         }
 
-        public async void AttemptLogin(string Email, string Password)
+        public async void AttemptLogin(string Email, string Password, bool SaveLoginDetail = false)
         {
             HttpWebRequest request = CreateLoginPostRequest(Email, Password);
 
@@ -48,14 +53,26 @@ namespace CoursePlanner
                     LoginJson.DeserializeFromStream(stream, out loginData);
                 }
 
+                var loginStatus = LoginData.GetLoginStatus();
+
+                if (loginStatus == LoginStatus.Successful)
+                {
+                    UpdateLoginDetail(Email, Password, SaveLoginDetail);
+                    LoginAttempts = 0;
+                }
+                else
+                {
+                    LoginAttempts++;
+                }
+
                 // Triggers the callback event
-                Callback?.Invoke((HttpWebResponse)response, LoginData.Token);
+                Callback?.Invoke((HttpWebResponse)response, loginStatus, LoginData.Token);
             }
         }
 
         private HttpWebRequest CreateLoginPostRequest(string Email, string Password)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(loginLink);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(LoginLink);
             request.ContentType = "application/json";
             request.Method = "POST";
             AddPostParams(ref request, Email, Password);
@@ -70,6 +87,22 @@ namespace CoursePlanner
             StreamWriter requestWriter = new StreamWriter(stream);
             requestWriter.Write(postString);
             requestWriter.Close();
+        }
+
+        public bool UpdateLoginDetail(string Email, string Password, bool SaveLoginDetail = false)
+        {
+            var setting = UserSettings.LoadSetting();
+            if (SaveLoginDetail)
+            {
+                setting.UserName = Email;
+                setting.PasswordHash = Utilities.GetHashed(Password);
+            }
+            else
+            {
+                setting.UserName = String.Empty;
+                setting.PasswordHash = String.Empty;
+            }
+            return UserSettings.SaveSetting(setting);
         }
     }
 }

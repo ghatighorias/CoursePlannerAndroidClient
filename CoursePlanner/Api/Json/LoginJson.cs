@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
+using CoursePlanner.Api;
 
 namespace CoursePlanner
 {
@@ -24,6 +25,18 @@ namespace CoursePlanner
             using (var jsonTextReader = new JsonTextReader(sr))
             {
                 loginJson = serializer.Deserialize<LoginJson>(jsonTextReader);
+            }
+        }
+
+        public LoginStatus GetLoginStatus()
+        {
+            if (Token == "error" || Token == string.Empty)
+            {
+                return LoginStatus.Failed;
+            }
+            else
+            {
+                return LoginStatus.Successful;
             }
         }
     }

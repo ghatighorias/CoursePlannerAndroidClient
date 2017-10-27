@@ -5,6 +5,7 @@ using System;
 using System.Net;
 using Android.Content;
 using Android.Views;
+using CoursePlanner.Api;
              
 namespace CoursePlanner
 {
@@ -41,9 +42,9 @@ namespace CoursePlanner
             loginHandler.AttemptLogin(email.Text, password.Text);
         }
 
-        void LoginHandler_Callback(System.Net.HttpWebResponse Response, string LoginToken)
+        void LoginHandler_Callback(System.Net.HttpWebResponse Response, LoginStatus Status, string LoginToken)
         {
-            if (Response.StatusCode == HttpStatusCode.OK && LoginToken != "error")
+            if (Status == LoginStatus.Successful)
             {
                 var calendarListIntent = new Intent(this, typeof(CalendarList));
                 calendarListIntent.PutExtra("Token", loginHandler.LoginData.Token);

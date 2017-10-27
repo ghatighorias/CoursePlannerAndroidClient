@@ -92,6 +92,7 @@
     <Compile Include="Api\Utilities.cs" />
     <Compile Include="ClassDetail.cs" />
     <Compile Include="UserSettings.cs" />
+    <Compile Include="Api\DataTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

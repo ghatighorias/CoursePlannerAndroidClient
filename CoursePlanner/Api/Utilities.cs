@@ -23,11 +23,6 @@ namespace CoursePlanner.Api
             Request.Headers.Add("authorization", authorizationCode);
         }
 
-        public static bool ValidateHash(string Request, string SavedHashed)
-        {
-            return GetHashed(Request) == SavedHashed;
-        }
-
         public static string GetHashed(string Input)
         {
             byte[] data = Encoding.ASCII.GetBytes(Input);
