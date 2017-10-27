@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+  <dev>
+	<api>
+    	<server>http://10.0.2.2:4000</server>
+        <path>
+    	  <login>/api/sessions</login>
+    	  <calendar>/calendar</calendar>
+    	</path>
+    </api>
+  </dev>
+ 
+  <prod>
+    <api>
+        <server>SERVER_URL</server>
+        <path>
+          <login>/api/sessions</login>
+          <calendar>/calendar</calendar>
+        </path>
+    </api>		
+  </prod>
+	
+  
+</config>
