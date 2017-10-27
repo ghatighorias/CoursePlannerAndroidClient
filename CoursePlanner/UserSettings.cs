@@ -1,26 +1,25 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using CoursePlanner.Api;
 
 namespace CoursePlanner
 {
     public static class UserSettings
     {
-        private static string slotName;
-        public static string SlotName
+        public static String SlotName
         {
-            get { return slotName; }
-            set { slotName = value;}
+            get;
+            set;
         }
 
         public static Setting LoadSetting()
         {
             var prefs = Application.Context.GetSharedPreferences(SlotName, FileCreationMode.Private);
-            var ServerUrl = prefs.GetString("ServerUrl", "");
+
+            var UserName = prefs.GetString("UserName", String.Empty);
+            var ServerUrl = prefs.GetString("ServerUrl", String.Empty);
+            var PasswordHash = prefs.GetString("PasswordHash", String.Empty);
             var SaveLoginDetail = prefs.GetBoolean("SaveLoginDetail", false);
-            var UserName = prefs.GetString("UserName", "");
-            var PasswordHash = prefs.GetString("PasswordHash", "");
 
             return new Setting(ServerUrl, SaveLoginDetail, UserName, PasswordHash);
         }
@@ -29,8 +28,12 @@ namespace CoursePlanner
         {
             var prefs = Application.Context.GetSharedPreferences(SlotName, FileCreationMode.Private);
             var prefEditor = prefs.Edit();
+
+            prefEditor.PutString("UserName", setting.UserName);
             prefEditor.PutString("ServerUrl", setting.ServerUrl);
+            prefEditor.PutString("PasswordHash", setting.PasswordHash);
             prefEditor.PutBoolean("SaveLoginDetail", setting.SaveLoginDetail);
+
             return prefEditor.Commit();
         }
     }
@@ -55,11 +58,10 @@ namespace CoursePlanner
             set;
         }
 
-        private string passwordHash;
         public string PasswordHash
         {
-            get { return passwordHash; }
-            set { passwordHash = Utilities.GetHashed(value); }
+            get;
+            set;
         }
 
         public Setting()
@@ -68,6 +70,7 @@ namespace CoursePlanner
 
         public Setting(string serverUrl, bool saveLoginDetail, String userName, String passwordHash)
         {
+            ServerUrl = serverUrl;
             SaveLoginDetail = saveLoginDetail;
             UserName = userName;
             PasswordHash = passwordHash;
