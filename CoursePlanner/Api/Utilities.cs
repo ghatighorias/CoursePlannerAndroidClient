@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CoursePlanner.Api
 {
-    public class Utilities
+    public static class Utilities
     {
-        private Utilities()
-        {
-        }
-
         public static string FormatDate(DateTime dateTime)
         {
             return dateTime.ToString("yyyy-MM-dd");
@@ -23,6 +21,19 @@ namespace CoursePlanner.Api
         {
             string authorizationCode = String.Format("Bearer {0}", LoginToken);
             Request.Headers.Add("authorization", authorizationCode);
+        }
+
+        public static bool ValidateHash(string Request, string SavedHashed)
+        {
+            return GetHashed(Request) == SavedHashed;
+        }
+
+        public static string GetHashed(string Input)
+        {
+            byte[] data = Encoding.ASCII.GetBytes(Input);
+            SHA256CryptoServiceProvider sha256 = new SHA256CryptoServiceProvider();
+            byte[] sha256data = sha256.ComputeHash(data);
+            return Encoding.ASCII.GetString(sha256data);
         }
     }
 }

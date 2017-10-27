@@ -1,6 +1,7 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
+using CoursePlanner.Api;
 
 namespace CoursePlanner
 {
@@ -18,7 +19,10 @@ namespace CoursePlanner
             var prefs = Application.Context.GetSharedPreferences(SlotName, FileCreationMode.Private);
             var ServerUrl = prefs.GetString("ServerUrl", "");
             var SaveLoginDetail = prefs.GetBoolean("SaveLoginDetail", false);
-            return new Setting(ServerUrl, SaveLoginDetail);
+            var UserName = prefs.GetString("UserName", "");
+            var PasswordHash = prefs.GetString("PasswordHash", "");
+
+            return new Setting(ServerUrl, SaveLoginDetail, UserName, PasswordHash);
         }
 
         public static bool SaveSetting(Setting setting)
@@ -28,19 +32,6 @@ namespace CoursePlanner
             prefEditor.PutString("ServerUrl", setting.ServerUrl);
             prefEditor.PutBoolean("SaveLoginDetail", setting.SaveLoginDetail);
             return prefEditor.Commit();
-        }
-
-        public static bool IsSettingSaved(out Setting setting)
-        {
-            setting = LoadSetting();
-            if (setting.SaveLoginDetail == false && setting.ServerUrl == String.Empty)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
         }
     }
 
@@ -58,10 +49,28 @@ namespace CoursePlanner
             set;
         }
 
-        public Setting(string serverUrl, bool saveLoginDetail)
+        public string UserName
         {
-            ServerUrl = ServerUrl;
+            get;
+            set;
+        }
+
+        private string passwordHash;
+        public string PasswordHash
+        {
+            get { return passwordHash; }
+            set { passwordHash = Utilities.GetHashed(value); }
+        }
+
+        public Setting()
+        {
+        }
+
+        public Setting(string serverUrl, bool saveLoginDetail, String userName, String passwordHash)
+        {
             SaveLoginDetail = saveLoginDetail;
+            UserName = userName;
+            PasswordHash = passwordHash;
         }
     }
 }
