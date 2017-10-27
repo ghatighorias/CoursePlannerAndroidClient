@@ -10,7 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using CoursePlanner.Api.Json;
+using CoursePlanner.Api;
 using static Android.Widget.TableRow;
 
 namespace CoursePlanner
@@ -99,9 +99,9 @@ namespace CoursePlanner
             var classDetail = new Intent(this, typeof(ClassDetail));
             classDetail.PutExtra("Term_name", ClassData.Term_name);
             classDetail.PutExtra("Course_name", ClassData.Course_name);
-            classDetail.PutExtra("Date", ClassData.Date.ToShortDateString());
-            classDetail.PutExtra("Starting_at", ClassData.Starting_at.ToShortTimeString());
-            classDetail.PutExtra("Finishes_at", ClassData.Finishes_at.ToShortTimeString());
+            classDetail.PutExtra("Date", Utilities.FormatDate(ClassData.Date));
+            classDetail.PutExtra("Starting_at", Utilities.FormatTime(ClassData.Starting_at);
+            classDetail.PutExtra("Finishes_at", Utilities.FormatTime(ClassData.Finishes_at);
             classDetail.PutExtra("Classroom", ClassData.Classroom);
             StartActivity(classDetail);
         }

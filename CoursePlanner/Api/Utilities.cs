@@ -14,6 +14,11 @@ namespace CoursePlanner.Api
             return dateTime.ToString("yyyy-MM-dd");
         }
 
+        public static string FormatTime(DateTime dateTime)
+        {
+            return dateTime.ToString("HH:mm");
+        }
+
         public static void AddAuthentication(ref HttpWebRequest Request, string LoginToken)
         {
             string authorizationCode = String.Format("Bearer {0}", LoginToken);

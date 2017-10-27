@@ -20,12 +20,12 @@ namespace CoursePlanner
         {
             base.OnCreate(savedInstanceState);
 
-            string Term_name = Intent.GetStringExtra("Term_name") ?? "";
-            string Course_name = Intent.GetStringExtra("Course_name") ?? "";
-            string Date = Intent.GetStringExtra("Date") ?? "";
-            string Starting_at = Intent.GetStringExtra("Starting_at") ?? "";
-            string Finishes_at = Intent.GetStringExtra("Finishes_at") ?? "";
-            string Classroom = Intent.GetStringExtra("Classroom") ?? "";
+            string Term_name = Intent.GetStringExtra("Term_name") ?? "TBD";
+            string Course_name = Intent.GetStringExtra("Course_name") ?? "TBD";
+            string Date = Intent.GetStringExtra("Date") ?? "TBD";
+            string Starting_at = Intent.GetStringExtra("Starting_at") ?? "TBD";
+            string Finishes_at = Intent.GetStringExtra("Finishes_at") ?? "TBD";
+            string Classroom = Intent.GetStringExtra("Classroom") ?? "TBD";
 
             SetContentView(Resource.Layout.ClassDetail);
 
