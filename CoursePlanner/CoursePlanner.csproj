@@ -91,6 +91,7 @@
     <Compile Include="Api\Json\ClassJson.cs" />
     <Compile Include="Api\Utilities.cs" />
     <Compile Include="ClassDetail.cs" />
+    <Compile Include="UserSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
