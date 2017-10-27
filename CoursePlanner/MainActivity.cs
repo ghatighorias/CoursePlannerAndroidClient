@@ -4,7 +4,8 @@ using Android.OS;
 using System;
 using System.Net;
 using Android.Content;
-
+using Android.Views;
+             
 namespace CoursePlanner
 {
     [Activity(Label = "CoursePlanner", MainLauncher = true, Icon = "@mipmap/icon")]
@@ -22,19 +23,19 @@ namespace CoursePlanner
 
             loginHandler.Callback += LoginHandler_Callback;
 
-            // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
 
-            // Get our button from the layout resource,
-            // and attach an event to it
+            ToggleLogginErrorTextView(false);
+
             Button loginButton = FindViewById<Button>(Resource.Id.button1);
             loginButton.Click += LoginButton_Click;
 
         }
 
         void LoginButton_Click(object sender, EventArgs e)
-        {                                                              
-            FindViewById<TextView>(Resource.Id.LoginErrorLabel).Text = "";
+        {
+            ToggleLogginErrorTextView(false);
+
             EditText email = FindViewById<EditText>(Resource.Id.editText2);
             EditText password = FindViewById<EditText>(Resource.Id.editText4);
             loginHandler.AttemptLogin(email.Text, password.Text);
@@ -50,7 +51,21 @@ namespace CoursePlanner
             }
             else
             {
+                ToggleLogginErrorTextView(true);
+            }
+        }
+
+        private void ToggleLogginErrorTextView(bool On)
+        {
+            if (On)
+            {
                 FindViewById<TextView>(Resource.Id.LoginErrorLabel).Text = "User name or password is incorrect";
+                FindViewById<TextView>(Resource.Id.LoginErrorLabel).Visibility = ViewStates.Visible;
+            }
+            else
+            {
+                FindViewById<TextView>(Resource.Id.LoginErrorLabel).Text = "";
+                FindViewById<TextView>(Resource.Id.LoginErrorLabel).Visibility = ViewStates.Invisible;
             }
         }
     }

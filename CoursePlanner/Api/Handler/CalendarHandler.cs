@@ -22,16 +22,16 @@ namespace CoursePlanner
             set;
         }
 
-        private Uri calendarLink;
-        public Uri CalendarLink
+        private Uri calendarApiLink;
+        public Uri CalendarApiLink
         {
-            get { return calendarLink; }
-            private set { calendarLink = value; }
+            get { return calendarApiLink; }
+            private set { calendarApiLink = value; }
         }
 
-        public CalendarHandler(Uri CalendarLink, string AuthenticationToken)
+        public CalendarHandler(Uri CalendarApiLink, string AuthenticationToken)
         {
-            calendarLink = CalendarLink;
+            calendarApiLink = CalendarApiLink;
             Token = AuthenticationToken;
         }
 
@@ -53,10 +53,9 @@ namespace CoursePlanner
             }
         }
 
-        private HttpWebRequest CreateGetRequest(DateTime dateTime, bool MyClasses)
+        private HttpWebRequest CreateGetRequest(DateTime dateTime, bool myClasses)
         {
-            string requestParams = CreateCalendarRequestParam(dateTime, MyClasses);
-            string completeRequestUrl = String.Format("{0}?{1}",CalendarLink, requestParams);
+            string completeRequestUrl = CreateCalendarApiRequestUrlWithParam(dateTime, myClasses);
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(completeRequestUrl);
             request.ContentType = "application/json";
@@ -65,10 +64,18 @@ namespace CoursePlanner
             return request;
         }
 
+        private string CreateCalendarApiRequestUrlWithParam(DateTime dateTime, bool MyClasses)
+        {
+            string requestParams = CreateCalendarRequestParam(dateTime, MyClasses);
+            return String.Format("{0}?{1}", CalendarApiLink, requestParams);
+        }
+
         private string CreateCalendarRequestParam(DateTime dateTime, bool MyClasses)
         {
             string formattedDate = Utilities.FormatDate(dateTime);
             return  String.Format("date={0}", formattedDate);
         }
+
+
     }
 }

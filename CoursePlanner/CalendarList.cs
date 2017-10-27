@@ -97,12 +97,14 @@ namespace CoursePlanner
             var ClassData = calendarHandler.CalendarData.Classes[classRowIndex];
 
             var classDetail = new Intent(this, typeof(ClassDetail));
+
             classDetail.PutExtra("Term_name", ClassData.Term_name);
             classDetail.PutExtra("Course_name", ClassData.Course_name);
             classDetail.PutExtra("Date", Utilities.FormatDate(ClassData.Date));
-            classDetail.PutExtra("Starting_at", Utilities.FormatTime(ClassData.Starting_at);
-            classDetail.PutExtra("Finishes_at", Utilities.FormatTime(ClassData.Finishes_at);
+            classDetail.PutExtra("Starting_at", Utilities.FormatTime(ClassData.Starting_at));
+            classDetail.PutExtra("Finishes_at", Utilities.FormatTime(ClassData.Finishes_at));
             classDetail.PutExtra("Classroom", ClassData.Classroom);
+
             StartActivity(classDetail);
         }
 
